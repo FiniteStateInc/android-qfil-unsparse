@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 '''
  qfil-unsparse
  Copyright (C) 2017  Nathan Rennie-Waldock <nathan.renniewaldock@gmail.com>
@@ -71,12 +71,12 @@ def copyfileobj (fsrc, fdst, bufsize=16384, filesize=None):
                         else:
                             bar += " "
 
-                print "%d%% [%s] %s (%s/s) %s          \r" % (percent, bar, mksize(progress), mksize(speed) if speed else "-.-- MB", "eta " + eta if eta and percent < 100 else ""),
+                print(f"{percent}% [{bar}] {mksize(progress)} ({mksize(speed) if speed else '-.-- MB'}/s) {'eta ' + eta if eta and percent < 100 else ''}          \r", end='')
+
                 sys.stdout.flush()
 
                 lastpercent = percent
             lastprogress = progress
-    print
 
 def main():
     parser = argparse.ArgumentParser(description="Copyright (C) 2017  Nathan Rennie-Waldock <nathan.renniewaldock@gmail.com>\n"
@@ -106,7 +106,7 @@ def main():
             continue
 
         try:
-            start_sector = long(attribs["start_sector"])
+            start_sector = int(attribs["start_sector"])
         except ValueError:
             continue
 
@@ -118,7 +118,7 @@ def main():
                 "filename": attribs["filename"],
                 "sectors": attribs["num_partition_sectors"],
                 "start_sector": start_sector,
-                "sector_size": long(attribs["SECTOR_SIZE_IN_BYTES"])
+                "sector_size": int(attribs["SECTOR_SIZE_IN_BYTES"])
             }
         )
 
@@ -132,13 +132,13 @@ def main():
             known_partitions.append(label)
 
     if args.list:
-        print "Known partitions: %s" % (" ".join(known_partitions))
+        print("Known partitions: %s" % (" ".join(known_partitions)))
         sys.exit()
 
     if not all_partitions and args.partition not in partitions:
-        print "ERROR: Partition %s not found" % (args.partition)
+        print("ERROR: Partition %s not found" % (args.partition))
 
-        print "Known partitions: %s" % (" ".join(known_partitions))
+        print("Known partitions: %s" % (" ".join(known_partitions)))
         sys.exit(1)
 
     for label, parts in partitions.items():
@@ -152,7 +152,7 @@ def main():
                     f.seek(seek)
                     copyfileobj(open(os.path.join(base, part["filename"]), "rb"), f, 16384, os.path.getsize(part["filename"]))
 
-                    print "%s: %s, start %d" % (label, part["filename"], (part["start_sector"] - partition_start))
+                    print("%s: %s, start %d" % (label, part["filename"], (part["start_sector"] - partition_start)))
 
 
 if __name__ == '__main__':
