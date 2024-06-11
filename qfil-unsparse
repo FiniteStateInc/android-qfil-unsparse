@@ -9,6 +9,7 @@ from natsort import natsorted
 from time import time
 import sys, os
 import argparse
+import shutil
 
 def is_file (f):
     if not os.path.exists(f):
@@ -150,7 +151,12 @@ def main():
                 for part in parts:
                     seek = part["sector_size"] * (part["start_sector"] - partition_start)
                     f.seek(seek)
-                    copyfileobj(open(os.path.join(base, part["filename"]), "rb"), f, 16384, os.path.getsize(part["filename"]))
+                    src_file = os.path.join(base, part["filename"])
+                    src_file_obj = open(os.path.join(base, part["filename"]), "rb")
+                    copyfileobj(src_file_obj, f, 16384, os.path.getsize(part["filename"]))
+                    src_file_obj.close()
+                    # Remove the source file
+                    shutil.rmtree(src_file)
 
                     print("%s: %s, start %d" % (label, part["filename"], (part["start_sector"] - partition_start)))
 
