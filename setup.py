@@ -9,7 +9,7 @@ setup(
     name = "qfil-unsparse",
     version = format_version(),
     packages = find_packages(),
-    url = "https://github.com/NHellFire/android-qfil-unsparse",
+    url = "https://github.com/FiniteStateInc/android-qfil-unsparse",
     scripts = ["qfil-unsparse"]
     )
 
