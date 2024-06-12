@@ -92,6 +92,7 @@ def main():
 
     all_partitions = args.partition == "" or args.partition == "all"
     base = os.path.dirname(args.xml)
+    print(f"{base}")
     output = args.output
     if not os.path.isdir(output):
         os.makedirs(output)
@@ -151,7 +152,7 @@ def main():
                     seek = part["sector_size"] * (part["start_sector"] - partition_start)
                     f.seek(seek)
                     src_file = os.path.join(base, part["filename"])
-                    src_file_obj = open(os.path.join(base, part["filename"]), "rb")
+                    src_file_obj = open(src_file, "rb")
                     copyfileobj(src_file_obj, f, 16384, os.path.getsize(part["filename"]))
                     src_file_obj.close()
                     # Remove the source file
